@@ -73,9 +73,14 @@ export const useChat = () => {
         ),
         assistantMessage,
       ]);
-    } catch (error: any) {
-      toast.error(error.message || "The assistant failed to respond.");
-      userMessage.status = "error";
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message || "The assistant failed to respond.");
+      } else {
+        toast.error("An unknown error occurred.");
+      }
+
+      // Update the message status in state
       setMessages((prev) =>
         prev.map(
           (m): Message =>
